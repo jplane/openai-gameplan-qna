@@ -1,0 +1,14 @@
+{
+	"name": "OpenAI",
+	"image": "mcr.microsoft.com/devcontainers/python:3",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-toolsai.jupyter",
+				"ms-python.vscode-pylance"
+			]
+		}
+	},
+	"postStartCommand": "pip install -r requirements.txt"
+}

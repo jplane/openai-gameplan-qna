@@ -1,0 +1,8 @@
+ipykernel
+ipywidgets
+python-dotenv
+openai
+langchain
+llama-index
+PyPDF2
+docx2txt
