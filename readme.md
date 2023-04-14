@@ -1,4 +1,4 @@
-# OpenAI on Azure - Bring Your Own Data
+# OpenAI on Azure - ISE Gameplan QnA
 
 This repo demonstrates how to interrogate custom data (ISE gameplan documents) using OpenAI LLMs.
 
