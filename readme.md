@@ -1,12 +1,6 @@
 # OpenAI on Azure - Bring Your Own Data
 
-This repo demonstrates how to use [LlamaIndex](https://gpt-index.readthedocs.io/en/latest/index.html) to interrogate custom data sources with OpenAI LLMs running on Microsoft Azure.
-
-Specifically, it uses [SimpleDirectoryReader](https://llamahub.ai/l/file) to extract text from PDFs, Word documents, etc. in a local directory to use as prompt context for LLM queries. A [custom class implementation](./azure_openai.py) routes query requests to a [provisioned OpenAI endpoint in Azure](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/overview).
-
-The advantage of this approach is that LlamaIndex and its [ecosystem of data integrations](https://llamahub.ai/) abstracts the details of pulling data from custom sources and including it in query prompts appropriate for a given model. Data from [multiple custom sources](https://gpt-index.readthedocs.io/en/latest/use_cases/queries.html#synthesis-over-heterogenous-data) can be queried together, and [new data sources](https://gpt-index.readthedocs.io/en/latest/how_to/customization/custom_llms.html) can be easily integrated.
-
-Note that LlamaIndex uses a technique called [in-context learning](https://medium.com/@atmabodha/pre-training-fine-tuning-and-in-context-learning-in-large-language-models-llms-dd483707b122), which injects additional context into LLM prompts to answer questions specific to your custom data source. Azure OpenAI Service also supports another approach called [model fine-tuning](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/how-to/fine-tuning?pivots=programming-language-python), which typically improves model performance and reduces cost and latency.
+This repo demonstrates how to interrogate custom data (ISE gameplan documents) using OpenAI LLMs.
 
 ## Prerequisites
 
@@ -26,20 +20,22 @@ Note that LlamaIndex uses a technique called [in-context learning](https://mediu
 
 1. [Deploy](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model) a 'text-davinci-003' model to your OpenAI resource.
 
-1. Copy [template.env](./template.env) into a new file called '.env'. Update the API_BASE and API_KEY values using those [found in the Azure portal](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/chatgpt-quickstart?tabs=command-line&pivots=programming-language-python#retrieve-key-and-endpoint) for your provisioned OpenAI resource. For API_VERSION use '2023-03-15-preview'. For DEPLOYMENT_NAME use the name of the model you deployed in the previous step.
+1. [Deploy](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model) a 'text-embedding-ada-002' (v2) model to your OpenAI resource.
 
-1. Copy one or more PDF or DOCX files into the [data](./data/) folder. These are the custom data sources you'll be querying using your OpenAI model.
+1. Copy [template.env](./template.env) into a new file called '.env'. Update the API_BASE and API_KEY values using those [found in the Azure portal](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/chatgpt-quickstart?tabs=command-line&pivots=programming-language-python#retrieve-key-and-endpoint) for your provisioned OpenAI resource. For API_VERSION use '2023-03-15-preview'. For COMPLETION_DEPLOYMENT_NAME use the name of the 'davinci' model you deployed in the previous step. For EMBEDDINGS_DEPLOYMENT_NAME use the 'text-embedding-ada-002' deployment.
 
-1. Open [main.ipynb](./main.ipynb) and update the text "YOUR CUSTOM PROMPT" with a query relevant to your source documents. For example, if you've included several project overview documents, try asking for a list of all technologies referenced within them, etc.
+1. Copy one or more gameplan DOCX files into the [data](./data/) folder. These are the custom data sources you'll be querying using your OpenAI model. For this PoC use gameplan docs which adhere to the [gameplan template](https://aka.ms/gameplantemplate).
 
-1. Run the notebooks cells in [main.ipynb](./main.ipynb) in order to invoke your deployed LLM in Azure. Output of the last cell should show the result of your custom query.
+1. Run the notebooks cells in [main.ipynb](./main.ipynb) in order to invoke your deployed LLM in Azure. Output of the last cells should show examples of gameplan prompts and answers.
 
 ## Ideas for Next Steps
 
 1. Try adjusting the temperature of your model, to see how results change
 
-1. Use LlamaIndex to query information in a SQL database
+1. Incorporate multiple documents into the QnA functionality
 
-1. Write a LlamaIndex integration for your own custom REST API
+1. [Parse tables](https://sanyammulay.gitbooks.io/microsoft-office-parsing-doc-sheet-presentation/content/chapter1.html) in the gameplan doc to include more information
 
-1. Use OpenAI on Azure to fine-tune your model and eliminate the need for LlamaIndex entirely
+1. Store vectorized results in a [vector database](https://www.pinecone.io/lp/vector-database)
+
+1. Try other document types (CPR, etc.)
